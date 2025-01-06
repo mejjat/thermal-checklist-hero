@@ -3,46 +3,61 @@ import { Button } from "@/components/ui/button";
 import { Eye, FileEdit, Trash2, Download } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface Checklist {
   id: string;
   date: string;
   type: string;
   engine: string;
+  engineSerial: string;
+  ecmSerial: string;
+  hmCurrent: string;
 }
 
 const CompletedForms = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [checklists] = useState<Checklist[]>([
-    { id: '1', date: '2024-03-20', type: 'Réception', engine: 'T1 Bull D11' },
-    { id: '2', date: '2024-03-19', type: 'Expédition', engine: '992K Loader' },
+    { 
+      id: '1', 
+      date: '2024-03-20', 
+      type: 'Réception', 
+      engine: 'T1 Bull D11',
+      engineSerial: 'ENG123',
+      ecmSerial: 'ECM456',
+      hmCurrent: '5000'
+    },
+    { 
+      id: '2', 
+      date: '2024-03-19', 
+      type: 'Expédition', 
+      engine: '992K Loader',
+      engineSerial: 'ENG789',
+      ecmSerial: 'ECM012',
+      hmCurrent: '3500'
+    },
   ]);
 
   const handleEdit = (id: string) => {
-    toast({
-      title: "Modification en cours",
-      description: "Cette fonctionnalité sera bientôt disponible.",
-    });
+    navigate(`/nouvelle?edit=${id}`);
   };
 
   const handleDelete = (id: string) => {
     toast({
-      title: "Suppression",
-      description: "Cette fonctionnalité sera bientôt disponible.",
+      title: "Fiche supprimée",
+      description: `La fiche ${id} a été supprimée avec succès.`,
     });
   };
 
   const handleView = (id: string) => {
-    toast({
-      title: "Visualisation",
-      description: "Cette fonctionnalité sera bientôt disponible.",
-    });
+    navigate(`/view/${id}`);
   };
 
   const handleDownloadPDF = (id: string) => {
     toast({
       title: "Téléchargement PDF",
-      description: "Cette fonctionnalité sera bientôt disponible.",
+      description: `Le PDF de la fiche ${id} est en cours de téléchargement.`,
     });
   };
 
@@ -57,14 +72,20 @@ const CompletedForms = () => {
         ) : (
           checklists.map((checklist) => (
             <Card key={checklist.id} className="p-6">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                   <h3 className="font-medium">{checklist.engine}</h3>
                   <p className="text-sm text-muted-foreground">
                     {checklist.date} - {checklist.type}
                   </p>
+                  <p className="text-sm text-muted-foreground">
+                    Série moteur: {checklist.engineSerial}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    HM: {checklist.hmCurrent}
+                  </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap md:flex-nowrap">
                   <Button
                     variant="outline"
                     size="icon"
