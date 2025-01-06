@@ -2,8 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ChecklistForm } from "@/components/ChecklistForm";
+import ChecklistList from "@/pages/ChecklistList";
+import CompletedForms from "@/pages/CompletedForms";
+import Navigation from "@/components/Navigation";
 
 const queryClient = new QueryClient();
 
@@ -13,8 +16,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Navigation />
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<ChecklistList />} />
+          <Route path="/nouvelle" element={<ChecklistForm />} />
+          <Route path="/accomplies" element={<CompletedForms />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

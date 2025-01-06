@@ -1,7 +1,7 @@
-import { ChecklistForm } from "@/components/ChecklistForm";
+import { Navigate } from "react-router-dom";
 
 const Index = () => {
-  return <ChecklistForm />;
+  return <Navigate to="/" replace />;
 };
 
 export default Index;
