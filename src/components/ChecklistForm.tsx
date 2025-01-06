@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { GeneralInfo } from "./checklist/GeneralInfo";
 import { Responsibles } from "./checklist/Responsibles";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export const ChecklistForm = () => {
   const [date, setDate] = useState<Date>();
@@ -215,3 +217,4 @@ const Notes = () => (
     </div>
   </div>
 );
+
