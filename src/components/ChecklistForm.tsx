@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { GeneralInfo } from "./checklist/GeneralInfo";
 import { Responsibles } from "./checklist/Responsibles";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { EngineInfo } from "./checklist/EngineInfo";
+import { SensorControl } from "./checklist/SensorControl";
+import { StartingCircuit } from "./checklist/StartingCircuit";
+import { WiringControl } from "./checklist/WiringControl";
 
 export const ChecklistForm = () => {
   const [date, setDate] = useState<Date>();
@@ -15,7 +17,6 @@ export const ChecklistForm = () => {
   const { toast } = useToast();
 
   const handleSave = () => {
-    // Here you would typically save the form data
     toast({
       title: "Checklist enregistrée",
       description: "La checklist a été enregistrée avec succès.",
@@ -93,110 +94,27 @@ const EngineCategories = () => (
   </div>
 );
 
-const CategorySection = ({ title, items }: { title: string; items: string[] }) => (
-  <div className="border rounded-lg p-4">
-    <h3 className="font-medium mb-2">{title}</h3>
-    <div className="grid grid-cols-3 gap-2">
-      {items.map((item) => (
-        <Button
-          key={item}
-          variant="outline"
-          className="text-sm"
-          onClick={() => {}}
-        >
-          {item}
-        </Button>
-      ))}
-    </div>
-  </div>
-);
-
-const EngineInfo = () => (
-  <div className="form-group">
-    <h2 className="section-title">Informations spécifiques au moteur</h2>
-    <div className="space-y-4">
-      <div>
-        <Label htmlFor="engine-serial">Numéro de série moteur</Label>
-        <Input id="engine-serial" className="mt-1" />
-      </div>
-      <div>
-        <Label htmlFor="ecm-serial">Numéro de série ECM moteur</Label>
-        <Input id="ecm-serial" className="mt-1" />
-      </div>
-      <div>
-        <Label htmlFor="hm-current">HM actuel de l'engin</Label>
-        <Input id="hm-current" type="number" className="mt-1" />
-      </div>
-    </div>
-  </div>
-);
-
-const SensorControl = () => {
-  const sensors = [
-    "Capteur de régime moteur",
-    "Capteur de température liquide refroidissement",
-    "Switch température d'eau",
-    "Palpeur débit liquide refroidissement",
-    "Capteur de pression d'huile moteur",
-    // ... add all other sensors
-  ];
+const CategorySection = ({ title, items }: { title: string; items: string[] }) => {
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   return (
-    <div className="form-group">
-      <h2 className="section-title">Contrôle des capteurs</h2>
-      <div className="space-y-4">
-        {sensors.map((sensor) => (
-          <SensorItem key={sensor} name={sensor} />
+    <div className="border rounded-lg p-4">
+      <h3 className="font-medium mb-2">{title}</h3>
+      <div className="grid grid-cols-3 gap-2">
+        {items.map((item) => (
+          <Button
+            key={item}
+            variant={selectedItem === item ? "default" : "outline"}
+            className="text-sm"
+            onClick={() => setSelectedItem(item === selectedItem ? null : item)}
+          >
+            {item}
+          </Button>
         ))}
       </div>
     </div>
   );
 };
-
-const SensorItem = ({ name }: { name: string }) => (
-  <div>
-    <Label>{name}</Label>
-    <div className="status-selector">
-      <Button variant="outline" className="status-new">Neuf</Button>
-      <Button variant="outline" className="status-good">Bon</Button>
-      <Button variant="outline" className="status-bad">Mauvais</Button>
-      <Button variant="outline" className="status-missing">Manquant</Button>
-    </div>
-  </div>
-);
-
-const StartingCircuit = () => (
-  <div className="form-group">
-    <h2 className="section-title">Contrôle du circuit de démarrage</h2>
-    <div className="space-y-4">
-      {[
-        "Démarreur 1",
-        "Démarreur 2",
-        "Alternateur de charge",
-        "Courroie d'alternateur de charge",
-        "Tendeur de courroie",
-        "État de tension courroie"
-      ].map((item) => (
-        <SensorItem key={item} name={item} />
-      ))}
-    </div>
-  </div>
-);
-
-const WiringControl = () => (
-  <div className="form-group">
-    <h2 className="section-title">Contrôle branchement et câblage</h2>
-    <div className="space-y-4">
-      {[
-        "Faisceau électrique du moteur thermique",
-        "Branchement électrique des capteurs et switch",
-        "Attachement et isolation du faisceau électrique"
-      ].map((item) => (
-        <SensorItem key={item} name={item} />
-      ))}
-    </div>
-  </div>
-);
 
 const Notes = () => (
   <div className="form-group">
@@ -217,4 +135,3 @@ const Notes = () => (
     </div>
   </div>
 );
-
