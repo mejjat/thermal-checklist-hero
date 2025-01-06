@@ -1,18 +1,29 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { GeneralInfo } from "./checklist/GeneralInfo";
+import { Responsibles } from "./checklist/Responsibles";
 
 export const ChecklistForm = () => {
   const [date, setDate] = useState<Date>();
   const [checklistType, setChecklistType] = useState("reception");
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleSave = () => {
+    // Here you would typically save the form data
+    toast({
+      title: "Checklist enregistrée",
+      description: "La checklist a été enregistrée avec succès.",
+    });
+    navigate("/");
+  };
+
+  const handleCancel = () => {
+    navigate("/");
+  };
 
   return (
     <div className="checklist-container">
@@ -21,78 +32,28 @@ export const ChecklistForm = () => {
       </h1>
 
       <Card className="p-6">
-        <div className="form-group">
-          <h2 className="section-title">Informations générales</h2>
-          
-          <div className="mb-4">
-            <Label htmlFor="control-date">Date du contrôle</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : "Sélectionner une date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          <div className="mb-4">
-            <Label>Type de Checklist</Label>
-            <RadioGroup
-              defaultValue="reception"
-              onValueChange={setChecklistType}
-              className="flex space-x-4 mt-2"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="reception" id="reception" />
-                <Label htmlFor="reception">Réception</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="expedition" id="expedition" />
-                <Label htmlFor="expedition">Expédition</Label>
-              </div>
-            </RadioGroup>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <h2 className="section-title">Responsables</h2>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="resp-electric">Responsable électrique Engin</Label>
-              <Input id="resp-electric" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="resp-atelier">Responsable Atelier Engin (S/E)</Label>
-              <Input id="resp-atelier" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="resp-inspector">Inspecteur Bureau de Méthode</Label>
-              <Input id="resp-inspector" className="mt-1" />
-            </div>
-          </div>
-        </div>
-
+        <GeneralInfo
+          date={date}
+          setDate={setDate}
+          checklistType={checklistType}
+          setChecklistType={setChecklistType}
+        />
+        <Responsibles />
         <EngineCategories />
         <EngineInfo />
         <SensorControl />
         <StartingCircuit />
         <WiringControl />
         <Notes />
+
+        <div className="flex justify-end space-x-4 mt-8">
+          <Button variant="outline" onClick={handleCancel}>
+            Annuler
+          </Button>
+          <Button onClick={handleSave}>
+            Enregistrer
+          </Button>
+        </div>
       </Card>
 
       <footer className="text-center py-8 text-sm text-gray-600">
